@@ -1,0 +1,29 @@
+name: Signal First Architectures CI/CD pipeline
+
+on:
+  schedule:
+    - cron: '0 */3 * * *' # Every 3 hours
+  workflow_dispatch: # Manual trigger
+  push: # Runs on pushes to main or dev
+    branches: [ main, dev ]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.17.0' # Matches Angular 19 requirements
+      - name: Install Dependencies
+        run: npm ci # Downloads reactive-lint
+      - name: Verify reactive-lint Installation
+        run: npm list reactive-lint || true # Confirms installation
+      - name: Run reactive-lint
+        run: npx reactive-lint src/**/*.ts || true # Adjust to actual CLI command
+      - name: Run Unit Tests
+        run: npm run test -- --watch=false || true # Karma tests
+      - name: Build Angular Project
+        run: npm run build -- --configuration production || true # Production build

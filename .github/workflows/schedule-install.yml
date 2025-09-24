@@ -27,5 +27,3 @@ jobs:
         run: npm run test -- --watch=false || true # Karma tests
       - name: Build Angular Project
         run: npm run build -- --configuration production || true # Production build
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v3

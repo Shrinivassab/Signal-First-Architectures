@@ -13,17 +13,42 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20.19.0' # Matches Angular 19 and avoids EBADENGINE
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install Dependencies
-        run: npm ci # Downloads reactive-lint
-      - name: Verify reactive-lint Installation
-        run: npm list reactive-lint || true # Confirms installation
+        run: npm ci
+
+      - name: Verify reactive-lint Installation (Optional)
+        # Keeps || true as it's just a check, not a critical failure condition
+        run: npm list reactive-lint || true 
+
       - name: Run reactive-lint
-        run: npx reactive-lint src/**/*.ts || true # Adjust to actual CLI command
+        # Removed || true - linting failures should break the build
+        run: npx reactive-lint src/**/*.ts
+
       - name: Run Unit Tests
-        run: npm run test -- --watch=false || true # Karma tests
+        # Removed || true - test failures should break the build
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
       - name: Build Angular Project
-        run: npm run build -- --configuration production || true # Production build
+        # Removed || true - build failures should break the build
+        run: npm run build -- --configuration production
+
+      - name: Upload Build Artifacts (Optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-app-dist
+          path: dist/signal-first-architectures/browser # Adjust path as per your angular.json output
+          retention-days: 7 # Keep artifacts for 7 days

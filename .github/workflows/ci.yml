@@ -3,14 +3,13 @@ name: CI - Signal-First-Architectures
 on:
   schedule:
     - cron: '0 */2 * * *'
+
+  # Allow manual trigger too
   workflow_dispatch:
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    concurrency:
-      group: ci-sfa
-      cancel-in-progress: true
 
     steps:
       - name: Checkout Repository
@@ -26,7 +25,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build Project
-        run: npm run build --if-present
+        run: npm run build
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@latest
@@ -34,9 +33,12 @@ jobs:
           chrome-version: stable
 
       - name: Run Tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+        run: npm test
         env:
           CI: true
 
+      - name: Run Lint
+        run: npm run lint:reactive
+
       - name: Display Status
-        run: echo "✅ Build and test completed successfully!"
+        run: echo "✅ Build, test, and lint completed successfully!"

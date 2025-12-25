@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store, createAction, createReducer, on, props } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -34,12 +34,9 @@ imports: [AsyncPipe],
   `
 })
 export class NgRxBenchmarkComponent {
-  nodes$: Observable<number[]>;
+  private store = inject(Store<{ benchmark: number[] }>);
+  nodes$: Observable<number[]> = this.store.select('benchmark');
   lastUpdateTime = 0;
-
-  constructor(private store: Store<{ benchmark: number[] }>) {
-    this.nodes$ = this.store.select('benchmark');
-  }
 
   updateAll() {
     const start = performance.now();

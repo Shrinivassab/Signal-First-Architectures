@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Store, select } from '@ngrx/store';
 import { increment } from './counter.actions';
@@ -15,9 +15,8 @@ import { Observable } from 'rxjs';
 })
 export class CounterWidgetComponent implements OnInit {
   @Input() index!: number;
+  private store = inject(Store);
   count$!: Observable<number>;
-
-  constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.count$ = this.store.pipe(select(selectCounter(this.index)));

@@ -7,7 +7,9 @@ import { BehaviorSubject } from 'rxjs';
   imports: [CommonModule],
   template: `
     <button (click)="updateAll()">Update All</button>
-    <div *ngFor="let node of nodes">{{ node.value }}</div>
+    @for (node of nodes; track node) {
+      <div>{{ node.value }}</div>
+    }
     <div>Last update time: {{ lastUpdateTime }} ms</div>
   `
 })

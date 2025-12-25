@@ -1,14 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-signal-benchmark',
   template: `
     <button (click)="updateAll()">Update All</button>
-    <div *ngFor="let node of nodes">{{ node() }}</div>
+    @for (node of nodes; track node) {
+      <div>{{ node() }}</div>
+    }
     <div>Last update time: {{ lastUpdateTime }} ms</div>
   `,
-  imports: [CommonModule]
+  imports: []
 })
 export class SignalBenchmarkComponent {
   nodes = Array.from({ length: 100000 }, () => signal(0));

@@ -2,7 +2,9 @@
     <h2>RxJS Counter Dashboard</h2>
     <button (click)="reset()">Reset All</button>
     <div class="dashboard">
-      <app-counter-widget *ngFor="let i of indexes" [index]="i"></app-counter-widget>
+      @for (i of indexes; track i) {
+        <app-counter-widget [index]="i"></app-counter-widget>
+      }
     </div>
   </div>
   

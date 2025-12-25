@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { CounterService } from './counter.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-counter-widget',
@@ -11,9 +12,8 @@ import { CounterService } from './counter.service';
 })
 export class CounterWidgetComponent implements OnInit {
   @Input() index!: number;
-  count$!: any;
-
-  constructor(private counterService: CounterService) {}
+  private counterService = inject(CounterService);
+  count$!: Observable<number>;
 
   ngOnInit(): void {
     this.count$ = this.counterService.counters$[this.index];

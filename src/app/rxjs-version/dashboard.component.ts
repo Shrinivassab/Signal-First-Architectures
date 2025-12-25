@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CounterWidgetComponent } from './counter-widget.component';
 import { CounterService } from './counter.service';
@@ -13,9 +13,8 @@ import { CounterService } from './counter.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent {
+  private counterService = inject(CounterService);
   indexes = Array.from({ length: 10 }, (_, i) => i);
-
-  constructor(private counterService: CounterService) {}
 
   reset(): void {
     this.counterService.resetAll();

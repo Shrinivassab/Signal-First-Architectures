@@ -2,12 +2,13 @@
     <h2>Signals Counter Dashboard</h2>
     <button (click)="reset()">Reset All</button>
     <div class="dashboard">
-      <app-signal-counter
-        *ngFor="let i of getIndexes()"
-        [index]="i"
-        [value]="getCounter(i)"
-        (incrementEvent)="increment($event)"
-      ></app-signal-counter>
+      @for (i of getIndexes(); track i) {
+        <app-signal-counter
+          [index]="i"
+          [value]="getCounter(i)"
+          (incrementEvent)="increment($event)"
+        ></app-signal-counter>
+      }
     </div>
   </div>
   
